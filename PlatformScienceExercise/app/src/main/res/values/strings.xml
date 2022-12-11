@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Platform Science Exercise</string>
+    <string name="delivery_text">Delivery</string>
+    <string name="go_button_text">GO</string>
+    <string name="driver_text">DRIVER:</string>
+    <string name="address_label">DELIVERY ADDRESS:</string>
+    <string name="image_desc">Data status image</string>
 </resources>
