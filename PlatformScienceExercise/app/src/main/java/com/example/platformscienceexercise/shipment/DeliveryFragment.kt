@@ -19,23 +19,18 @@ class DeliveryFragment : Fragment() {
     ): View {
 
         binding = FragmentDeliveryBinding.inflate(inflater)
-        binding.lifecycleOwner = this
-
-        val application = requireNotNull(this.activity).application
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val driver = arguments?.let { DeliveryFragmentArgs.fromBundle(it).selectedDriver }
 
-        val viewModelFactory = DeliveryViewModelFactory(driver.toString(), application)
+        val viewModelFactory = driver?.let { DeliveryViewModelFactory(it) }
 
-        deliveryViewModel = ViewModelProvider(this, viewModelFactory)[DeliveryViewModel::class.java]
+        deliveryViewModel = viewModelFactory?.let { ViewModelProvider(this, it) }
+            ?.get(DeliveryViewModel::class.java)!!
 
 
         binding.viewModel = deliveryViewModel
 
         return binding.root
-    }
-    override fun onDestroyView() {
-        super.onDestroyView()
-       binding.unbind()
     }
 }

@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_delivery">
         <argument
             android:name="selectedDriver"
-            app:argType="string"/>
+            app:argType="com.example.platformscienceexercise.model.SelectedDriver"/>
     </fragment>
 
 </navigation>

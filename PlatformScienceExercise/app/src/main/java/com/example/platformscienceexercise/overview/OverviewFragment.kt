@@ -1,11 +1,12 @@
 package com.example.platformscienceexercise.overview
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.platformscienceexercise.databinding.FragmentOverviewBinding
 import com.example.platformscienceexercise.overview.adapter.OverviewListAdapter
 
@@ -27,7 +28,7 @@ class OverviewFragment : Fragment() {
 
         binding = FragmentOverviewBinding.inflate(inflater)
 
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.viewModel = overviewViewModel
 
@@ -36,14 +37,12 @@ class OverviewFragment : Fragment() {
         })
 
         overviewViewModel.navigateToSelectedDriver.observe(viewLifecycleOwner) {
-            overviewViewModel.displayUserDetailsComplete()
+            if (it != null) {
+                this.findNavController().navigate(OverviewFragmentDirections.actionShowDelivery(it))
+                overviewViewModel.displayUserDetailsComplete()
+            }
         }
 
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding.unbind()
     }
 }

@@ -1,9 +1,14 @@
 package com.example.platformscienceexercise.overview
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.platformscienceexercise.model.DeliveryData
+import com.example.platformscienceexercise.model.SelectedDriver
 import com.example.platformscienceexercise.repository.DeliveryDataRepository
+import com.example.platformscienceexercise.utils.Utils
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -18,14 +23,14 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     val status: LiveData<DataStatus>
         get() = _status
 
-    private val _deliveryData = MutableLiveData<DeliveryData>()
+    private val _drivers = MutableLiveData<List<SelectedDriver>>()
 
-    val deliveryData: LiveData<DeliveryData>
-        get() = _deliveryData
+    val drivers: LiveData<List<SelectedDriver>>
+        get() = _drivers
 
-    private val _navigateToSelectedDriver = MutableLiveData<String?>()
+    private val _navigateToSelectedDriver = MutableLiveData<SelectedDriver?>()
 
-    val navigateToSelectedDriver: LiveData<String?>
+    val navigateToSelectedDriver: LiveData<SelectedDriver?>
         get() = _navigateToSelectedDriver
 
     init {
@@ -36,7 +41,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             val data = repository.deliveryData
             try {
-                _deliveryData.value = data
+                _drivers.value = setShipments(data)
                 _status.value = DataStatus.LOADED
 
             } catch (error: IOException) {
@@ -45,8 +50,20 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun displayDeliveryDriver(driver: String) {
-        _navigateToSelectedDriver.value = driver
+    private fun setShipments(deliveryData: DeliveryData): List<SelectedDriver> {
+        val selectedDrivers = ArrayList<SelectedDriver>()
+        deliveryData.drivers?.forEach {
+            selectedDrivers.add(SelectedDriver(it,
+                deliveryData.shipments?.let { it1 -> getDestinationForDriver(it, it1) }))
+        }
+        return selectedDrivers
+    }
+    private fun getDestinationForDriver(driver: String, destinations: List<String>): String? {
+        return Utils().getDestinationAddressForDriver(driver, destinations)
+    }
+
+    fun displayDeliveryDriver(selectedDriver: SelectedDriver) {
+        _navigateToSelectedDriver.value = selectedDriver
     }
 
     fun displayUserDetailsComplete() {
