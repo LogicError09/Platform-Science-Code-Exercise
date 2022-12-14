@@ -104,7 +104,7 @@ class Utils {
 
     /**
      * TOP: SECRET ALGORITHM:
-     * Determines the sustainability score for each address and returns the right one for the right driver
+     * Determines the suitability score for each address and returns the right one for the right driver
      */
     fun getDestinationAddressForDriver(driver: String, destinations: List<String>): String {
         val scores = ArrayList<BigDecimal>()
@@ -152,5 +152,4 @@ class Utils {
         }
         return getDestinationWithBestSS(destinations, scores)
     }
-
 }

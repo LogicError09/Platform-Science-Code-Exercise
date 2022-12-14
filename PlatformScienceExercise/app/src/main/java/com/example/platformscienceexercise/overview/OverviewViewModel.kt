@@ -58,7 +58,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
         }
         return selectedDrivers
     }
-    private fun getDestinationForDriver(driver: String, destinations: List<String>): String? {
+    private fun getDestinationForDriver(driver: String, destinations: List<String>): String {
         return Utils().getDestinationAddressForDriver(driver, destinations)
     }
 
