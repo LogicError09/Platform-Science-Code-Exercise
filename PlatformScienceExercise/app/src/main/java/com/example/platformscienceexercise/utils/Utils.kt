@@ -141,7 +141,7 @@ class Utils {
                         formatBigDecimal((vowelsCount(driver) * SS_EVEN_MULTIPLIER).toBigDecimal()) + formatBigDecimal(
                             (consonantsCount(
                                 driver
-                            ) * SS_ODD_MULTIPLIER / 2).toBigDecimal()
+                            ) * SS_ODD_MULTIPLIER.div(2)).toBigDecimal()
                         )
                     )
                 } else {
